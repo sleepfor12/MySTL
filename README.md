@@ -21,14 +21,11 @@
 ```
 mystl/
 ├── include/mystl/          # 头文件目录
-│   ├── core/               # 核心模块
 │   ├── memory/             # 内存管理
 │   ├── iterator/           # 迭代器
 │   ├── container/          # 容器
 │   ├── algorithm/          # 算法
 │   ├── ranges/             # Ranges 模块
-│   ├── utility/            # 工具类型
-│   ├── threading/          # 线程支持
 │   └── stl.hpp             # 聚合头文件
 ├── test/                   # 测试代码
 ├── examples/               # 示例代码

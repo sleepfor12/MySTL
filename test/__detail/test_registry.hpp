@@ -8,13 +8,40 @@
 // - 测试执行框架
 // - 测试结果收集和报告
 //
-// 说明：提供自动化的单元测试框架，支持测试用例的自动注册和执行。
-//
 
 #ifndef MYSTL_TEST_DETAIL_TEST_REGISTRY_HPP
 #define MYSTL_TEST_DETAIL_TEST_REGISTRY_HPP
 
-// Implementation placeholder
+#include <mystl/config.hpp>
+#include <functional>
+#include <vector>
+#include <string>
+#include <map>
+
+namespace mystl::test::__detail {
+
+// 测试用例注册表
+class test_registry {
+public:
+    static test_registry& instance() {
+        static test_registry registry;
+        return registry;
+    }
+    
+    void register_test(const std::string& suite, const std::string& name, 
+                       std::function<void()> test_func) {
+        tests_[suite].emplace_back(name, std::move(test_func));
+    }
+    
+    const auto& get_tests() const {
+        return tests_;
+    }
+    
+private:
+    std::map<std::string, std::vector<std::pair<std::string, std::function<void()>>>> tests_;
+};
+
+} // namespace mystl::test::__detail
 
 #endif // MYSTL_TEST_DETAIL_TEST_REGISTRY_HPP
 
