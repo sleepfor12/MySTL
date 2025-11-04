@@ -1,0 +1,8 @@
+//
+// Created by zbyme on 2025/11/4.
+//
+
+#ifndef MYSTL_INSERT_ITERATOR_HPP
+#define MYSTL_INSERT_ITERATOR_HPP
+
+#endif //MYSTL_INSERT_ITERATOR_HPP

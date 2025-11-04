@@ -1,0 +1,8 @@
+//
+// Created by zbyme on 2025/11/4.
+//
+
+#ifndef MYSTL_UNINITIALIZED_HPP
+#define MYSTL_UNINITIALIZED_HPP
+
+#endif //MYSTL_UNINITIALIZED_HPP

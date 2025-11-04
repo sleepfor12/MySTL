@@ -1,0 +1,8 @@
+//
+// Created by zbyme on 2025/11/4.
+//
+
+#ifndef MYSTL_ENABLE_SHARED_FROM_THIS_HPP
+#define MYSTL_ENABLE_SHARED_FROM_THIS_HPP
+
+#endif //MYSTL_ENABLE_SHARED_FROM_THIS_HPP
