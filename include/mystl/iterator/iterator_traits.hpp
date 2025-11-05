@@ -1,8 +1,0 @@
-//
-// Created by zbyme on 2025/11/4.
-//
-
-#ifndef MYSTL_ITERATOR_TRAITS_HPP
-#define MYSTL_ITERATOR_TRAITS_HPP
-
-#endif //MYSTL_ITERATOR_TRAITS_HPP

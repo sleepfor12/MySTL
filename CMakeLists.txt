@@ -1,59 +1,62 @@
-cmake_minimum_required(VERSION 3.22)
-
-# 项目定义，包含版本号
+cmake_minimum_required(VERSION 3.20)
 project(MySTL 
-    VERSION 1.0.0
-    LANGUAGES CXX
-    DESCRIPTION "A C++23 compatible STL implementation library"
+  VERSION 0.1.0
+  LANGUAGES CXX
+  DESCRIPTION "A minimal STL implementation for C++23"
 )
 
-# C++ 标准设置
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# 设置默认构建类型
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
-endif()
+# Include CMake modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-if(MSVC)
-    add_compile_options(/W4 /permissive-)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+# Configure compiler features
+include(CompilerFeatures)
 
-include(cmake/CompilerOptions.cmake)
-
+# Library interface target
 add_library(mystl INTERFACE)
 add_library(mystl::mystl ALIAS mystl)
-
-target_include_directories(mystl INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+target_include_directories(mystl INTERFACE 
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(mystl INTERFACE cxx_std_23)
+# Apply warnings
+include(Warnings)
 
-set_target_properties(mystl PROPERTIES
-    EXPORT_NAME mystl
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${PROJECT_VERSION_MAJOR}
-)
-
-set(MYSTL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+# Apply sanitizers (for tests/examples, not the library itself)
+include(Sanitizers)
 
 enable_testing()
 
-option(MYSTL_BUILD_TESTS "Build tests" ON)
-option(MYSTL_BUILD_EXAMPLES "Build examples" ON)
+# Common definitions for consumers
+target_compile_definitions(mystl INTERFACE
+  $<$<CXX_COMPILER_ID:MSVC>:_CRT_SECURE_NO_WARNINGS=1>
+  $<$<CXX_COMPILER_ID:MSVC>:_SCL_SECURE_NO_WARNINGS=1>
+)
 
-if(MYSTL_BUILD_TESTS)
-    add_subdirectory(test)
-endif()
+# Per-compiler compile options (interface propagation)
+target_compile_options(mystl INTERFACE
+  $<$<CXX_COMPILER_ID:MSVC>:/permissive- /Zc:__cplusplus>
+  $<$<CXX_COMPILER_ID:MSVC>:/W4>
+  $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion>
+  $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion>
+)
 
-if(MYSTL_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
+# Installation
+include(GNUInstallDirs)
+install(TARGETS mystl
+  EXPORT MySTLTargets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-include(cmake/InstallConfig.cmake)
+add_subdirectory(examples)
+add_subdirectory(tests)
+
+
