@@ -55,11 +55,11 @@ template <class T>
 struct default_delete {
   constexpr default_delete() noexcept = default;
   template <class U>
-  default_delete(const default_delete<U>&) noexcept;
+  default_delete(const default_delete<U>&) noexcept{}
   
-  void operator()(T* ptr) const;
-  
-  // TODO: 调用 delete ptr
+  void operator()(T* ptr) const{
+    delete ptr;
+  }
 };
 
 // 数组特化的默认删除器
@@ -70,9 +70,9 @@ struct default_delete<T[]> {
   default_delete(const default_delete<U[]>&) noexcept;
   
   template <class U>
-  void operator()(U* ptr) const;
-  
-  // TODO: 调用 delete[] ptr
+  void operator()(U* ptr) const {
+    delete[] ptr;
+  }
 };
 
 /**
@@ -90,6 +90,7 @@ public:
 
   // 构造函数
   constexpr unique_ptr() noexcept;
+  constexpr unique_ptr(std::nullptr_t) noexcept;
   explicit unique_ptr(pointer p) noexcept;
   unique_ptr(pointer p, const Deleter& d) noexcept;
   unique_ptr(pointer p, Deleter&& d) noexcept;

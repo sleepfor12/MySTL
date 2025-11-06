@@ -119,6 +119,7 @@ MySTL/
 ## 文档
 
 - 详细开发计划与路线图请见：`docs/plan.md`
+- Memory 模块依赖关系分析与开发步骤：`docs/memory_dependencies.md`
 
 ## 构建选项
 
