@@ -52,7 +52,7 @@ struct custom_ptr {
   int* ptr;
   
   static custom_ptr pointer_to(int& r) noexcept {
-    custom_ptr p;
+    custom_ptr p{};
     p.ptr = &r;
     return p;
   }
@@ -89,7 +89,7 @@ MYSTL_TEST(pointer_traits_rebind, {
 // 测试重载了 operator& 的类型
 struct overloaded_address {
   int value;
-  overloaded_address* operator&() { return nullptr; }  // 重载 operator&
+  overloaded_address* operator&() const { return nullptr; }  // 重载 operator&
 };
 
 // 测试 pointer_to 与 std::addressof 的一致性
@@ -141,6 +141,11 @@ struct custom_ptr_with_to_address {
     custom_ptr_with_to_address p;
     p.ptr = &r;
     return p;
+  }
+  
+  // 添加 operator-> 以支持 std::to_address
+  int* operator->() const noexcept {
+    return ptr;
   }
   
   // 自定义 to_address

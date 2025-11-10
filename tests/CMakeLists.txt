@@ -6,6 +6,12 @@ add_executable(mystl_tests ${TEST_SOURCES})
 target_link_libraries(mystl_tests PRIVATE mystl)
 target_include_directories(mystl_tests PRIVATE ${CMAKE_SOURCE_DIR})
 
+# Windows平台需要指定控制台应用程序
+# 移除之前的方法，改为强制链接为console应用
+if (WIN32)
+  target_link_libraries(mystl_tests PRIVATE -Wl,--subsystem,console)
+endif()
+
 if (MYSTL_ENABLE_ASAN AND NOT MSVC)
   target_compile_options(mystl_tests PRIVATE -fsanitize=address,undefined)
   target_link_options(mystl_tests PRIVATE -fsanitize=address,undefined)
