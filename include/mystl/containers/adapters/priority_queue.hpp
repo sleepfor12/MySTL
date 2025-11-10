@@ -9,5 +9,3 @@ class priority_queue;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_ADAPTERS_PRIORITY_QUEUE_HPP
-
-

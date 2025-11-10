@@ -9,5 +9,3 @@ class deque;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_DEQUE_HPP
-
-

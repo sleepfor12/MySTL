@@ -15,7 +15,8 @@ struct BenchConfig {
 
 inline void run(const char* name, const std::function<void()>& func, BenchConfig cfg = {}) {
   using clock = std::chrono::steady_clock;
-  for (int i = 0; i < cfg.warmup_iters; ++i) func();
+  for (int i = 0; i < cfg.warmup_iters; ++i)
+    func();
   std::chrono::nanoseconds total{0};
   for (int i = 0; i < cfg.measure_iters; ++i) {
     auto t0 = clock::now();
@@ -29,9 +30,6 @@ inline void run(const char* name, const std::function<void()>& func, BenchConfig
 
 }  // namespace mystl_bench
 
-#define MYSTL_BENCH(name, body) \
-  ::mystl_bench::run(#name, [] body )
+#define MYSTL_BENCH(name, body) ::mystl_bench::run(#name, [] body)
 
 #endif  // MYSTL_TEST_FRAMEWORK_BENCH_HPP
-
-

@@ -34,4 +34,3 @@ struct allocation_result {
 }  // namespace mystl
 
 #endif  // MYSTL_MEMORY_ALLOCATION_RESULT_HPP
-

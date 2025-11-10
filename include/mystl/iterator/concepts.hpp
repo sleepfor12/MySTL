@@ -9,5 +9,3 @@ namespace mystl {
 }
 
 #endif  // MYSTL_ITERATOR_CONCEPTS_HPP
-
-

@@ -9,5 +9,3 @@ class queue;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_ADAPTERS_QUEUE_HPP
-
-

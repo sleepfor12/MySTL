@@ -28,7 +28,7 @@ struct Movable {
 struct NonMovable {
   int value;
   NonMovable(int v) : value(v) {}
-  NonMovable(NonMovable&&) = default;  // 可能抛出
+  NonMovable(NonMovable&& other) noexcept(false) : value(other.value) {}
   NonMovable(const NonMovable&) = default;
 };
 

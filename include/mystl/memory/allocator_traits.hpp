@@ -43,42 +43,40 @@
  * 5. 与容器的集成（通过容器基类使用）
  */
 
-#include "mystl/memory/allocator.hpp"
-#include <type_traits>
 #include <memory>
+#include <type_traits>
+
+#include "mystl/memory/allocator.hpp"
 
 namespace mystl {
 
 /**
  * @brief 分配器特性萃取器
- * 
+ *
  * 根据 cppreference.com/std::allocator_traits
  * 提供统一的分配器操作接口
  */
 template <class Alloc>
 struct allocator_traits {
   // 类型定义
-  using allocator_type         = Alloc;
-  using value_type             = typename Alloc::value_type;
-  using pointer                = typename Alloc::pointer;
-  using const_pointer          = typename Alloc::const_pointer;
-  using void_pointer           = typename std::pointer_traits<pointer>::template rebind<void>;
-  using const_void_pointer     = typename std::pointer_traits<pointer>::template rebind<const void>;
-  using difference_type         = typename Alloc::difference_type;
-  using size_type              = typename Alloc::size_type;
-  
+  using allocator_type = Alloc;
+  using value_type = typename Alloc::value_type;
+  using pointer = typename Alloc::pointer;
+  using const_pointer = typename Alloc::const_pointer;
+  using void_pointer = typename std::pointer_traits<pointer>::template rebind<void>;
+  using const_void_pointer = typename std::pointer_traits<pointer>::template rebind<const void>;
+  using difference_type = typename Alloc::difference_type;
+  using size_type = typename Alloc::size_type;
+
   // C++11: propagate_on_container_copy_assignment
-  using propagate_on_container_copy_assignment = 
-    typename Alloc::propagate_on_container_copy_assignment;
-  
+  using propagate_on_container_copy_assignment = typename Alloc::propagate_on_container_copy_assignment;
+
   // C++11: propagate_on_container_move_assignment
-  using propagate_on_container_move_assignment = 
-    typename Alloc::propagate_on_container_move_assignment;
-  
+  using propagate_on_container_move_assignment = typename Alloc::propagate_on_container_move_assignment;
+
   // C++11: propagate_on_container_swap
-  using propagate_on_container_swap = 
-    typename Alloc::propagate_on_container_swap;
-  
+  using propagate_on_container_swap = typename Alloc::propagate_on_container_swap;
+
   // C++11: is_always_equal
   using is_always_equal = typename Alloc::is_always_equal;
 
@@ -88,21 +86,21 @@ struct allocator_traits {
   // allocate - 分配内存
   static pointer allocate(Alloc& a, size_type n);
   static pointer allocate(Alloc& a, size_type n, const_void_pointer hint);
-  
+
   // TODO: 调用 a.allocate(n)
   // TODO: 如果 Alloc 没有 allocate，使用默认实现（operator new）
   // TODO: hint 版本用于优化（如果分配器支持）
 
   // deallocate - 释放内存
   static void deallocate(Alloc& a, pointer p, size_type n);
-  
+
   // TODO: 调用 a.deallocate(p, n)
   // TODO: 不抛出异常（nothrow）
 
   // construct - 构造对象
   template <class T, class... Args>
   static void construct(Alloc& a, T* p, Args&&... args);
-  
+
   // TODO: 如果 Alloc 有 construct 方法，调用它
   // TODO: 否则使用 placement new：new (p) T(std::forward<Args>(args)...)
   // TODO: 使用完美转发传递参数
@@ -110,19 +108,19 @@ struct allocator_traits {
   // destroy - 销毁对象
   template <class T>
   static void destroy(Alloc& a, T* p);
-  
+
   // TODO: 如果 Alloc 有 destroy 方法，调用它
   // TODO: 否则直接调用 p->~T()
 
   // max_size - 最大分配大小
   static size_type max_size(const Alloc& a) noexcept;
-  
+
   // TODO: 如果 Alloc 有 max_size，调用它
   // TODO: 否则返回 std::numeric_limits<size_type>::max() / sizeof(value_type)
 
   // select_on_container_copy_construction - 容器复制构造时的分配器选择
   static Alloc select_on_container_copy_construction(const Alloc& a);
-  
+
   // TODO: 如果 Alloc 有 select_on_container_copy_construction，调用它
   // TODO: 否则返回 a 的副本
 };
@@ -130,5 +128,3 @@ struct allocator_traits {
 }  // namespace mystl
 
 #endif  // MYSTL_MEMORY_ALLOCATOR_TRAITS_HPP
-
-

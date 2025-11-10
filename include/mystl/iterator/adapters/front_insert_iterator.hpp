@@ -8,5 +8,3 @@ namespace mystl {
 }
 
 #endif  // MYSTL_ITERATOR_ADAPTERS_FRONT_INSERT_ITERATOR_HPP
-
-

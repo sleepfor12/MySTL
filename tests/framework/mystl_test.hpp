@@ -50,22 +50,20 @@ inline int run_all() {
 template <class A, class B>
 inline void expect_eq(const A& a, const B& b, const char* ea, const char* eb, const char* file, int line) {
   if (!(a == b)) {
-    throw std::runtime_error(std::string(file) + ":" + std::to_string(line) +
-                             " EXPECT_EQ failed: " + ea + " == " + eb);
+    throw std::runtime_error(std::string(file) + ":" + std::to_string(line) + " EXPECT_EQ failed: " + ea + " == " + eb);
   }
 }
 
 inline void expect(bool cond, const char* expr, const char* file, int line) {
   if (!cond) {
-    throw std::runtime_error(std::string(file) + ":" + std::to_string(line) +
-                             " EXPECT failed: " + expr);
+    throw std::runtime_error(std::string(file) + ":" + std::to_string(line) + " EXPECT failed: " + expr);
   }
 }
 
 }  // namespace mystl_test
 
-#define MYSTL_TEST(name, body) \
-  static void mystl_test_fn_##name(); \
+#define MYSTL_TEST(name, body)                                                         \
+  static void mystl_test_fn_##name();                                                  \
   static ::mystl_test::Registrar mystl_registrar_##name(#name, &mystl_test_fn_##name); \
   static void mystl_test_fn_##name() body
 
@@ -73,5 +71,3 @@ inline void expect(bool cond, const char* expr, const char* file, int line) {
 #define MYSTL_EXPECT_EQ(a, b) ::mystl_test::expect_eq((a), (b), #a, #b, __FILE__, __LINE__)
 
 #endif  // MYSTL_TEST_FRAMEWORK_HPP
-
-

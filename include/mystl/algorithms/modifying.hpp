@@ -8,5 +8,3 @@ namespace mystl {
 }
 
 #endif  // MYSTL_ALGORITHMS_MODIFYING_HPP
-
-

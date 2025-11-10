@@ -11,5 +11,3 @@ class multiset;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_MULTISET_HPP
-
-

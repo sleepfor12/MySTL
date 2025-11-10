@@ -10,7 +10,6 @@ template <class T, unsigned long long Capacity>
 class inplace_vector;  // to be implemented
 // Design: Fixed capacity, no dynamic allocation, stack-based storage
 // Exception safety: Strong guarantee where possible
-}
+}  // namespace mystl
 
 #endif  // MYSTL_CONTAINERS_INPLACE_VECTOR_HPP
-

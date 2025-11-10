@@ -49,5 +49,3 @@ namespace mystl {
 }
 
 #endif  // MYSTL_ITERATOR_FACADE_HPP
-
-

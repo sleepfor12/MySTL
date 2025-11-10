@@ -11,5 +11,3 @@ class map;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_MAP_HPP
-
-

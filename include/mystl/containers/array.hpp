@@ -10,5 +10,3 @@ struct array;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_ARRAY_HPP
-
-

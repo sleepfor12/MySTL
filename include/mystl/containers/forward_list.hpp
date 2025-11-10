@@ -10,5 +10,3 @@ class forward_list;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_FORWARD_LIST_HPP
-
-

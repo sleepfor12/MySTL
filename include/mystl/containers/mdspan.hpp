@@ -8,22 +8,18 @@
 namespace mystl {
 
 // Layout policies (simplified)
-struct layout_left;   // row-major
-struct layout_right;  // column-major
-struct layout_stride; // custom stride
+struct layout_left;    // row-major
+struct layout_right;   // column-major
+struct layout_stride;  // custom stride
 
-template <class ElementType,
-          class Extents,
-          class LayoutPolicy = layout_right,
+template <class ElementType, class Extents, class LayoutPolicy = layout_right,
           class AccessorPolicy = void>
 class mdspan;  // to be implemented
 
 // Helper to create mdspan
 template <class ElementType, class Extents, class LayoutPolicy = layout_right>
-mdspan<ElementType, Extents, LayoutPolicy>
-make_mdspan(ElementType* data, const Extents& extents);  // to be implemented
+mdspan<ElementType, Extents, LayoutPolicy> make_mdspan(ElementType* data, const Extents& extents);  // to be implemented
 
 }  // namespace mystl
 
 #endif  // MYSTL_CONTAINERS_MDSPAN_HPP
-

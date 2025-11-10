@@ -3,10 +3,10 @@
 
 // placeholder for ranges::views::take subset
 
-namespace mystl { namespace views {
+namespace mystl {
+namespace views {
 // to be implemented
-}}  // namespace mystl::views
+}
+}  // namespace mystl
 
 #endif  // MYSTL_RANGES_VIEWS_TAKE_HPP
-
-

@@ -8,5 +8,3 @@ class string;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_STRING_HPP
-
-

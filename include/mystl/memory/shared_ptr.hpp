@@ -51,11 +51,12 @@
 namespace mystl {
 
 // 前向声明
-template <class T> class weak_ptr;
+template <class T>
+class weak_ptr;
 
 /**
  * @brief 共享所有权智能指针
- * 
+ *
  * 根据 cppreference.com/std::shared_ptr
  * 注意：W2 阶段完成接口设计，完整实现可延后
  */
@@ -86,7 +87,7 @@ public:
   shared_ptr(shared_ptr<Y>&& r) noexcept;
   template <class Y>
   explicit shared_ptr(const weak_ptr<Y>& r);
-  
+
   // TODO: 默认构造：引用计数为 0，指针为 nullptr
   // TODO: 从指针构造：创建控制块，引用计数为 1
   // TODO: 拷贝构造：增加引用计数
@@ -95,7 +96,7 @@ public:
 
   // 析构函数
   ~shared_ptr();
-  
+
   // TODO: 减少引用计数，如果为 0 则销毁对象和控制块
 
   // 赋值运算符
@@ -105,7 +106,7 @@ public:
   shared_ptr& operator=(shared_ptr&& r) noexcept;
   template <class Y>
   shared_ptr& operator=(shared_ptr<Y>&& r) noexcept;
-  
+
   // TODO: 先释放当前资源，再赋值
 
   // 修改器
@@ -116,11 +117,11 @@ public:
   void reset(Y* p, Deleter d);
   template <class Y, class Deleter, class Alloc>
   void reset(Y* p, Deleter d, Alloc alloc);
-  
+
   // TODO: 释放当前资源，设置新的指针和控制块
 
   void swap(shared_ptr& r) noexcept;
-  
+
   // TODO: 交换指针和控制块
 
   // 观察器
@@ -130,7 +131,7 @@ public:
   long use_count() const noexcept;
   bool unique() const noexcept;
   explicit operator bool() const noexcept;
-  
+
   // TODO: get() 返回存储的指针
   // TODO: operator* 返回 *get()
   // TODO: operator-> 返回 get()
@@ -195,5 +196,3 @@ shared_ptr<T> reinterpret_pointer_cast(const shared_ptr<U>& r) noexcept;
 }  // namespace mystl
 
 #endif  // MYSTL_MEMORY_SHARED_PTR_HPP
-
-

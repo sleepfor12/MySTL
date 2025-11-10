@@ -5,10 +5,8 @@
 // Non-owning view over contiguous memory
 
 namespace mystl {
-template <class T, long long Extent = -1> 
+template <class T, long long Extent = -1>
 class span;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_SPAN_HPP
-
-

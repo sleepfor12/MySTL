@@ -9,5 +9,3 @@ class vector;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_VECTOR_HPP
-
-

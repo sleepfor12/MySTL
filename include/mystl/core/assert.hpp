@@ -7,5 +7,3 @@
 #define MYSTL_ASSERT(cond) assert(cond)
 
 #endif  // MYSTL_CORE_ASSERT_HPP
-
-

@@ -11,7 +11,6 @@ class hive;  // to be implemented
 // Design: Block-based storage, stable iterators/references
 // O(1) erase, no rehashing, maintains insertion order within blocks
 // Exception safety: Strong guarantee where possible
-}
+}  // namespace mystl
 
 #endif  // MYSTL_CONTAINERS_HIVE_HPP
-

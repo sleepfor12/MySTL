@@ -10,5 +10,3 @@ class list;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_LIST_HPP
-
-

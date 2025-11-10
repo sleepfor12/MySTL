@@ -11,5 +11,3 @@ class set;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_SET_HPP
-
-

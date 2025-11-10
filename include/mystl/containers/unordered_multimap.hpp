@@ -10,4 +10,3 @@ class unordered_multimap;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_UNORDERED_MULTIMAP_HPP
-

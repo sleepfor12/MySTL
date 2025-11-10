@@ -35,27 +35,27 @@
 namespace mystl {
 
 // 迭代器类别标签
+using std::bidirectional_iterator_tag;
+using std::contiguous_iterator_tag;  // C++20
+using std::forward_iterator_tag;
 using std::input_iterator_tag;
 using std::output_iterator_tag;
-using std::forward_iterator_tag;
-using std::bidirectional_iterator_tag;
 using std::random_access_iterator_tag;
-using std::contiguous_iterator_tag;  // C++20
 
 /**
  * @brief 迭代器特性萃取器
- * 
+ *
  * 根据 cppreference.com/std::iterator_traits
  * 提取迭代器的标准类型信息
  */
 template <class It>
 struct iterator_traits {
-  using difference_type   = typename It::difference_type;
-  using value_type        = typename It::value_type;
-  using pointer           = typename It::pointer;
-  using reference         = typename It::reference;
+  using difference_type = typename It::difference_type;
+  using value_type = typename It::value_type;
+  using pointer = typename It::pointer;
+  using reference = typename It::reference;
   using iterator_category = typename It::iterator_category;
-  
+
   // TODO: 从迭代器类型 It 中提取类型成员
   // 思路：如果 It 是自定义迭代器，直接从其类型成员中提取
   // 如果提取失败，使用 SFINAE 回退到指针特化
@@ -64,12 +64,12 @@ struct iterator_traits {
 // 指针类型特化（T*）
 template <class T>
 struct iterator_traits<T*> {
-  using difference_type   = std::ptrdiff_t;
-  using value_type        = T;
-  using pointer           = T*;
-  using reference         = T&;
+  using difference_type = std::ptrdiff_t;
+  using value_type = T;
+  using pointer = T*;
+  using reference = T&;
   using iterator_category = std::contiguous_iterator_tag;
-  
+
   // TODO: 特化指针类型
   // 思路：指针类型直接使用标准类型，category 为 contiguous_iterator_tag (C++20)
 };
@@ -77,12 +77,12 @@ struct iterator_traits<T*> {
 // const 指针类型特化（const T*）
 template <class T>
 struct iterator_traits<const T*> {
-  using difference_type   = std::ptrdiff_t;
-  using value_type        = T;
-  using pointer           = const T*;
-  using reference         = const T&;
+  using difference_type = std::ptrdiff_t;
+  using value_type = T;
+  using pointer = const T*;
+  using reference = const T&;
   using iterator_category = std::contiguous_iterator_tag;
-  
+
   // TODO: 特化 const 指针类型
   // 思路：value_type 保持为 T（非 const），但 pointer 和 reference 为 const
 };
@@ -90,5 +90,3 @@ struct iterator_traits<const T*> {
 }  // namespace mystl
 
 #endif  // MYSTL_ITERATOR_TRAITS_HPP
-
-

@@ -161,5 +161,3 @@ ForwardIt uninitialized_value_construct_n(ForwardIt first, Size n);
 }  // namespace mystl
 
 #endif  // MYSTL_MEMORY_UNINITIALIZED_HPP
-
-

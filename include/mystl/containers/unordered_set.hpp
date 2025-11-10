@@ -10,5 +10,3 @@ class unordered_set;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_UNORDERED_SET_HPP
-
-

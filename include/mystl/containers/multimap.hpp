@@ -11,5 +11,3 @@ class multimap;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_MULTIMAP_HPP
-
-

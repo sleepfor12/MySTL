@@ -42,15 +42,16 @@
  * 4. 辅助函数 make_move_iterator() 简化构造
  */
 
-#include "mystl/iterator/traits.hpp"
 #include <iterator>
 #include <utility>
+
+#include "mystl/iterator/traits.hpp"
 
 namespace mystl {
 
 /**
  * @brief 移动迭代器适配器
- * 
+ *
  * 根据 cppreference.com/std::move_iterator
  * 将迭代器转换为移动迭代器，解引用时返回右值引用
  */
@@ -62,7 +63,7 @@ public:
   using iterator_category = typename iterator_traits<Iterator>::iterator_category;
   using value_type = typename iterator_traits<Iterator>::value_type;
   using difference_type = typename iterator_traits<Iterator>::difference_type;
-  using pointer = Iterator;  // 注意：移动迭代器的 pointer 类型是迭代器本身
+  using pointer = Iterator;        // 注意：移动迭代器的 pointer 类型是迭代器本身
   using reference = value_type&&;  // 返回右值引用
 
   // 构造函数
@@ -70,7 +71,7 @@ public:
   explicit move_iterator(Iterator i);
   template <class U>
   move_iterator(const move_iterator<U>& other);
-  
+
   // TODO: 默认构造：base() 为默认构造的迭代器
   // TODO: 显式构造：存储 i 作为 base()
   // TODO: 转换构造：允许从兼容的 move_iterator 构造
@@ -78,25 +79,25 @@ public:
   // 赋值运算符
   template <class U>
   move_iterator& operator=(const move_iterator<U>& other);
-  
+
   // TODO: 赋值：更新 base() 迭代器
 
   // 访问底层迭代器
   iterator_type base() const;
   const iterator_type& base() const&;
-  
+
   // TODO: 返回存储的 base() 迭代器
 
   // 解引用
   reference operator*() const;
   pointer operator->() const;
-  
+
   // TODO: operator* 返回 std::move(*base())
   // TODO: operator-> 返回 base()（如果 base() 是指针类型）
 
   // 下标访问（仅随机访问迭代器）
   reference operator[](difference_type n) const;
-  
+
   // TODO: 返回 std::move(base()[n])
 
   // 递增/递减
@@ -104,7 +105,7 @@ public:
   move_iterator operator++(int);
   move_iterator& operator--();
   move_iterator operator--(int);
-  
+
   // TODO: operator++ 递增 base()
   // TODO: operator-- 递减 base()
   // TODO: 前置版本返回引用，后置版本返回副本
@@ -114,7 +115,7 @@ public:
   move_iterator& operator+=(difference_type n);
   move_iterator operator-(difference_type n) const;
   move_iterator& operator-=(difference_type n);
-  
+
   // TODO: operator+ 返回 base() + n 构造的 move_iterator
   // TODO: operator- 返回 base() - n 构造的 move_iterator
   // TODO: operator+= 修改 base() 为 base() + n
@@ -128,43 +129,35 @@ private:
 
 // 算术运算
 template <class Iterator>
-move_iterator<Iterator> operator+(
-    typename move_iterator<Iterator>::difference_type n,
-    const move_iterator<Iterator>& it);
+move_iterator<Iterator> operator+(typename move_iterator<Iterator>::difference_type n,
+                                  const move_iterator<Iterator>& it);
 
 // TODO: 返回 it + n
 
 template <class Iterator>
-typename move_iterator<Iterator>::difference_type operator-(
-    const move_iterator<Iterator>& lhs,
-    const move_iterator<Iterator>& rhs);
+typename move_iterator<Iterator>::difference_type operator-(const move_iterator<Iterator>& lhs,
+                                                            const move_iterator<Iterator>& rhs);
 
 // TODO: 返回 lhs.base() - rhs.base()
 
 // 比较运算符
 template <class Iterator1, class Iterator2>
-bool operator==(const move_iterator<Iterator1>& lhs,
-                const move_iterator<Iterator2>& rhs);
+bool operator==(const move_iterator<Iterator1>& lhs, const move_iterator<Iterator2>& rhs);
 
 template <class Iterator1, class Iterator2>
-bool operator!=(const move_iterator<Iterator1>& lhs,
-                const move_iterator<Iterator2>& rhs);
+bool operator!=(const move_iterator<Iterator1>& lhs, const move_iterator<Iterator2>& rhs);
 
 template <class Iterator1, class Iterator2>
-bool operator<(const move_iterator<Iterator1>& lhs,
-                const move_iterator<Iterator2>& rhs);
+bool operator<(const move_iterator<Iterator1>& lhs, const move_iterator<Iterator2>& rhs);
 
 template <class Iterator1, class Iterator2>
-bool operator<=(const move_iterator<Iterator1>& lhs,
-                 const move_iterator<Iterator2>& rhs);
+bool operator<=(const move_iterator<Iterator1>& lhs, const move_iterator<Iterator2>& rhs);
 
 template <class Iterator1, class Iterator2>
-bool operator>(const move_iterator<Iterator1>& lhs,
-                const move_iterator<Iterator2>& rhs);
+bool operator>(const move_iterator<Iterator1>& lhs, const move_iterator<Iterator2>& rhs);
 
 template <class Iterator1, class Iterator2>
-bool operator>=(const move_iterator<Iterator1>& lhs,
-                 const move_iterator<Iterator2>& rhs);
+bool operator>=(const move_iterator<Iterator1>& lhs, const move_iterator<Iterator2>& rhs);
 
 // TODO: 所有比较运算符都基于 base() 的比较
 
@@ -177,5 +170,3 @@ move_iterator<Iterator> make_move_iterator(Iterator it);
 }  // namespace mystl
 
 #endif  // MYSTL_ITERATOR_ADAPTERS_MOVE_ITERATOR_HPP
-
-

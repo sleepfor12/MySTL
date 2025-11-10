@@ -10,4 +10,3 @@ class unordered_multiset;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_UNORDERED_MULTISET_HPP
-

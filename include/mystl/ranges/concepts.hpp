@@ -8,5 +8,3 @@ namespace mystl {
 }
 
 #endif  // MYSTL_RANGES_CONCEPTS_HPP
-
-

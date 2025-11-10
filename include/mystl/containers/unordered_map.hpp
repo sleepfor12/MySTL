@@ -10,5 +10,3 @@ class unordered_map;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_UNORDERED_MAP_HPP
-
-

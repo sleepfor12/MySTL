@@ -52,11 +52,12 @@
 namespace mystl {
 
 // 前向声明
-template <class T> class shared_ptr;
+template <class T>
+class shared_ptr;
 
 /**
  * @brief 弱引用智能指针
- * 
+ *
  * 根据 cppreference.com/std::weak_ptr
  * 注意：W2 阶段完成接口设计，完整实现可延后
  */
@@ -76,7 +77,7 @@ public:
   weak_ptr(weak_ptr&& r) noexcept;
   template <class Y>
   weak_ptr(weak_ptr<Y>&& r) noexcept;
-  
+
   // TODO: 默认构造：弱引用计数为 0
   // TODO: 拷贝构造：增加弱引用计数
   // TODO: 从 shared_ptr 构造：增加弱引用计数
@@ -84,7 +85,7 @@ public:
 
   // 析构函数
   ~weak_ptr();
-  
+
   // TODO: 减少弱引用计数，如果为 0 则销毁控制块
 
   // 赋值运算符
@@ -96,13 +97,13 @@ public:
   weak_ptr& operator=(weak_ptr&& r) noexcept;
   template <class Y>
   weak_ptr& operator=(weak_ptr<Y>&& r) noexcept;
-  
+
   // TODO: 先释放当前资源，再赋值
 
   // 修改器
   void reset() noexcept;
   void swap(weak_ptr& r) noexcept;
-  
+
   // TODO: reset() 释放当前资源
   // TODO: swap() 交换指针和控制块
 
@@ -110,7 +111,7 @@ public:
   long use_count() const noexcept;
   bool expired() const noexcept;
   shared_ptr<T> lock() const noexcept;
-  
+
   // TODO: use_count() 返回共享引用计数
   // TODO: expired() 返回 use_count() == 0
   // TODO: lock() 如果对象存在则返回 shared_ptr，否则返回空
@@ -131,5 +132,3 @@ void swap(weak_ptr<T>& a, weak_ptr<T>& b) noexcept;
 }  // namespace mystl
 
 #endif  // MYSTL_MEMORY_WEAK_PTR_HPP
-
-

@@ -1,5 +1,4 @@
 /**
- * 实现 mystl::pointer_traits，用于从指针类型中提取标准指针属性。
  * 为所有类似指针的类型（原生指针、智能指针、自定义指针等）
  * 提供统一的接口，使得泛型编程可以统一处理各种指针类型。
  *
@@ -39,7 +38,6 @@
 
 namespace mystl {
 
-// void_t 辅助（C++17 前可能需要自己定义，C++17 后使用 std::void_t）
 #if __cplusplus >= 201703L
 using std::void_t;
 #else
@@ -56,7 +54,7 @@ struct has_element_type<T, void_t<typename T::element_type>> : std::true_type {
   using type = typename T::element_type;
 };
 
-// SFINAE 辅助：检测类型是否有 difference_type 成员
+// 检测类型是否有 difference_type 成员
 template <class T, class = void>
 struct has_difference_type : std::false_type {};
 
@@ -65,7 +63,7 @@ struct has_difference_type<T, void_t<typename T::difference_type>> : std::true_t
   using type = typename T::difference_type;
 };
 
-// SFINAE 辅助：检测类型是否有 rebind 成员模板
+// 检测类型是否有 rebind 成员模板
 template <class T, class U, class = void>
 struct has_rebind : std::false_type {};
 
@@ -74,7 +72,7 @@ struct has_rebind<T, U, void_t<typename T::template rebind<U>>> : std::true_type
   using type = typename T::template rebind<U>;
 };
 
-// 辅助：从模板特化中提取第一个模板参数并替换为 U
+// 从模板特化中提取第一个模板参数并替换为 U
 // 用于实现 rebind 的模板特化检测（Template<T, Args...> -> Template<U, Args...>）
 template <class Ptr, class U, class = void>
 struct rebind_from_template {
@@ -82,35 +80,31 @@ struct rebind_from_template {
   using type = void;
 };
 
-// 特化：检测是否为单参数模板 Template<T>
+// 检测是否为单参数模板 Template<T>
 template <template <class> class Template, class T, class U>
 struct rebind_from_template<Template<T>, U, void_t<Template<U>>> {
   using type = Template<U>;
 };
 
-// 特化：检测是否为多参数模板 Template<T, Args...>
+// 检测是否为多参数模板 Template<T, Args...>
 template <template <class, class...> class Template, class T, class... Args, class U>
 struct rebind_from_template<Template<T, Args...>, U, void_t<Template<U, Args...>>> {
   using type = Template<U, Args...>;
 };
 
-// SFINAE 辅助：检测类型是否有 pointer_to 静态成员函数
 template <class T, class Elem, class = void>
 struct has_pointer_to : std::false_type {};
 
 template <class T, class Elem>
-struct has_pointer_to<T, Elem, void_t<decltype(
-  T::pointer_to(std::declval<typename std::add_lvalue_reference<Elem>::type>())
-)>> : std::true_type {};
+struct has_pointer_to<T, Elem,
+                      void_t<decltype(T::pointer_to(std::declval<typename std::add_lvalue_reference<Elem>::type>()))>>
+    : std::true_type {};
 
-// SFINAE 辅助：检测类型是否有 to_address 静态成员函数（C++20）
 template <class T, class = void>
 struct has_to_address : std::false_type {};
 
 template <class T>
-struct has_to_address<T, void_t<decltype(
-  T::to_address(std::declval<T>())
-)>> : std::true_type {
+struct has_to_address<T, void_t<decltype(T::to_address(std::declval<T>()))>> : std::true_type {
   using return_type = decltype(T::to_address(std::declval<T>()));
 };
 
@@ -129,153 +123,116 @@ struct pointer_traits {
   // 根据 LWG 3545，如果 Ptr 没有 element_type，应该是 SFINAE 友好的
   // 如果 has_element_type 为 false，使用依赖 false 的类型导致替换失败
   using element_type = typename std::conditional_t<
-    has_element_type<Ptr>::value,
-    has_element_type<Ptr>,
-    std::enable_if<has_element_type<Ptr>::value, void>  // 依赖 false，导致替换失败（SFINAE 友好）
-  >::type;
+      has_element_type<Ptr>::value, has_element_type<Ptr>,
+      std::enable_if<has_element_type<Ptr>::value, void>  // 依赖 false，导致替换失败（SFINAE 友好）
+      >::type;
 
   // difference_type: 从 Ptr::difference_type 提取，如果不存在则使用 ptrdiff_t
-  using difference_type = std::conditional_t<
-    has_difference_type<Ptr>::value,
-    typename has_difference_type<Ptr>::type,
-    std::ptrdiff_t
-  >;
+  using difference_type =
+      std::conditional_t<has_difference_type<Ptr>::value, typename has_difference_type<Ptr>::type, std::ptrdiff_t>;
 
-  // rebind: 从 Ptr::rebind<U> 提取，或从模板特化推断
-  // 标准要求：
   // 1. 如果存在 Ptr::rebind<U>，则为其
   // 2. 否则，如果 Ptr 是模板特化 Template<T, Args...>，则为 Template<U, Args...>
   template <class U>
-  using rebind = typename std::conditional_t<
-    has_rebind<Ptr, U>::value,
-    has_rebind<Ptr, U>,
-    rebind_from_template<Ptr, U>
-  >::type;
+  using rebind =
+      typename std::conditional_t<has_rebind<Ptr, U>::value, has_rebind<Ptr, U>, rebind_from_template<Ptr, U>>::type;
 
   // pointer_to: 获取指向对象的指针
   // 如果 Ptr 有 pointer_to 静态成员函数，调用它；否则需要特化处理
-  static typename std::enable_if_t<
-    has_pointer_to<Ptr, element_type>::value,
-    pointer
-  > pointer_to(typename std::add_lvalue_reference<element_type>::type r) noexcept {
+  static typename std::enable_if_t<has_pointer_to<Ptr, element_type>::value, pointer> pointer_to(
+      typename std::add_lvalue_reference<element_type>::type r) noexcept {
     return Ptr::pointer_to(r);
   }
-  
-  // to_address: 从花式指针获取原始指针（C++20，可选）
+
   // 如果 Ptr 有 to_address 静态成员函数，调用它
   // 否则，对于原生指针，直接返回；对于智能指针，通过 operator-> 获取
   template <class P = Ptr>
-  static constexpr typename std::enable_if_t<
-    has_to_address<P>::value,
-    typename has_to_address<P>::return_type
-  > to_address(const P& p) noexcept {
+  static constexpr typename std::enable_if_t<has_to_address<P>::value, typename has_to_address<P>::return_type>
+  to_address(const P& p) noexcept {
     return P::to_address(p);
   }
-  
+
   // 默认实现：对于原生指针或可通过 operator-> 获取的类型
   template <class P = Ptr>
-  static constexpr typename std::enable_if_t<
-    !has_to_address<P>::value && std::is_pointer_v<P>,
-    P
-  > to_address(const P& p) noexcept {
+  static constexpr typename std::enable_if_t<!has_to_address<P>::value && std::is_pointer_v<P>, P> to_address(
+      const P& p) noexcept {
     return p;
   }
-  
+
   // 对于智能指针等，通过 std::to_address 获取原始指针
   template <class P = Ptr>
-  static constexpr typename std::enable_if_t<
-    !has_to_address<P>::value && !std::is_pointer_v<P>,
-    decltype(std::to_address(std::declval<const P&>()))
-  > to_address(const P& p) noexcept {
+  static constexpr typename std::enable_if_t<!has_to_address<P>::value && !std::is_pointer_v<P>,
+                                             decltype(std::to_address(std::declval<const P&>()))>
+  to_address(const P& p) noexcept {
     return std::to_address(p);
   }
 };
 
-// 原生指针特化（T*）
 template <class T>
 struct pointer_traits<T*> {
-  using pointer         = T*;
-  using element_type    = T;
+  using pointer = T*;
+  using element_type = T;
   using difference_type = std::ptrdiff_t;
-  
-  // rebind: 将 T* 重新绑定为 U*
+
   template <class U>
   using rebind = U*;
 
-  // pointer_to: 对于原生指针，返回地址（C++20 constexpr）
   static constexpr pointer pointer_to(typename std::add_lvalue_reference<T>::type r) noexcept {
     return std::addressof(r);
   }
-  
-  // to_address: 从指针获取原始指针（C++20，可选）
-  // 对于原生指针，直接返回指针本身
-  static constexpr pointer to_address(pointer p) noexcept {
-    return p;
-  }
+
+  static constexpr pointer to_address(pointer p) noexcept { return p; }
 };
 
 // const 指针特化（const T*）
 template <class T>
 struct pointer_traits<const T*> {
-  using pointer         = const T*;
-  using element_type    = T;  // 注意：element_type 不是 const
+  using pointer = const T*;
+  using element_type = T;  // 注意：element_type 不是 const
   using difference_type = std::ptrdiff_t;
-  
+
   template <class U>
   using rebind = const U*;
 
   static constexpr pointer pointer_to(typename std::add_lvalue_reference<const T>::type r) noexcept {
     return std::addressof(r);
   }
-  
-  // to_address: 从指针获取原始指针（C++20，可选）
-  static constexpr pointer to_address(pointer p) noexcept {
-    return p;
-  }
+
+  static constexpr pointer to_address(pointer p) noexcept { return p; }
 };
 
-// volatile 指针特化（volatile T*）
 template <class T>
 struct pointer_traits<volatile T*> {
-  using pointer         = volatile T*;
-  using element_type    = T;
+  using pointer = volatile T*;
+  using element_type = T;
   using difference_type = std::ptrdiff_t;
-  
+
   template <class U>
   using rebind = volatile U*;
-  
+
   static constexpr pointer pointer_to(typename std::add_lvalue_reference<volatile T>::type r) noexcept {
     return std::addressof(r);
   }
-  
-  // to_address: 从指针获取原始指针（C++20，可选）
-  static constexpr pointer to_address(pointer p) noexcept {
-    return p;
-  }
+
+  static constexpr pointer to_address(pointer p) noexcept { return p; }
 };
 
-// const volatile 指针特化（const volatile T*）
 template <class T>
 struct pointer_traits<const volatile T*> {
-  using pointer         = const volatile T*;
-  using element_type    = T;
+  using pointer = const volatile T*;
+  using element_type = T;
   using difference_type = std::ptrdiff_t;
-  
+
   template <class U>
   using rebind = const volatile U*;
-  
+
   static constexpr pointer pointer_to(typename std::add_lvalue_reference<const volatile T>::type r) noexcept {
     return std::addressof(r);
   }
-  
-  // to_address: 从指针获取原始指针（C++20，可选）
-  static constexpr pointer to_address(pointer p) noexcept {
-    return p;
-  }
+
+  static constexpr pointer to_address(pointer p) noexcept { return p; }
 };
 
 }  // namespace mystl
 
 #endif  // MYSTL_MEMORY_POINTER_TRAITS_HPP
-
-

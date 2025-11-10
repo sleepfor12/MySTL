@@ -7,7 +7,7 @@
 namespace mystl {
 
 // Exception safety levels (documentation only, not enforced at compile time)
-// 
+//
 // NO-THROW: Operation never throws exceptions
 // STRONG: Operation either succeeds or has no effect (rollback on failure)
 // BASIC: Operation maintains invariants, but may leave objects in modified state
@@ -20,4 +20,3 @@ namespace mystl {
 }  // namespace mystl
 
 #endif  // MYSTL_CORE_EXCEPTION_SAFETY_HPP
-

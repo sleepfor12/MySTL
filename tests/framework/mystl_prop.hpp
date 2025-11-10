@@ -32,11 +32,9 @@ inline int run_property(const char* name, const std::function<void(std::mt19937_
 
 }  // namespace mystl_test
 
-#define MYSTL_PROP(name, body) \
-  static int mystl_prop_fn_##name() { \
-    return ::mystl_test::run_property(#name, [](std::mt19937_64& rng) body ); \
+#define MYSTL_PROP(name, body)                                                \
+  static int mystl_prop_fn_##name() {                                         \
+    return ::mystl_test::run_property(#name, [](std::mt19937_64 & rng) body); \
   }
 
 #endif  // MYSTL_TEST_FRAMEWORK_PROP_HPP
-
-

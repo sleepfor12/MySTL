@@ -3,14 +3,14 @@
 
 // internal buffer map for deque segments
 
-namespace mystl { namespace __details {
+namespace mystl {
+namespace __details {
 
 struct deque_buffer_placeholder {
   // placeholder for block size, map management
 };
 
-}}  // namespace mystl::__details
+}  // namespace __details
+}  // namespace mystl
 
 #endif  // MYSTL_CONTAINERS__DETAILS_DEQUE_BUFFER_HPP
-
-

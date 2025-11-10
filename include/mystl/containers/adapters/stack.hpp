@@ -9,5 +9,3 @@ class stack;  // to be implemented
 }
 
 #endif  // MYSTL_CONTAINERS_ADAPTERS_STACK_HPP
-
-
