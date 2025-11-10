@@ -46,8 +46,6 @@ struct allocator {
   using difference_type = std::ptrdiff_t;
   using propagate_on_container_move_assignment = std::true_type;
 
-  // 注意：已通过 LWG issue 3170 弃用（C++23 中仍存在，C++26 计划移除）
-  // 保留以保持兼容性，但建议使用 allocator_traits<allocator<T>>::is_always_equal
   using is_always_equal = std::true_type;
 
   // 构造函数

@@ -1,7 +1,5 @@
 # MySTL 开发计划与路线图（详细版）
 
-本文档给出 MySTL 后续 9 周的详细开发计划、交付物、质量门槛、风险与缓解策略，并提供依赖关系图、时间轴与进度跟踪图表。
-
 ## 1. 目标与范围
 - 容器：vector、deque、array、list、forward_list、inplace_vector(C++26)、hive(C++26)、map/multimap/set/multiset、unordered_*
 - 算法：非修改、修改、排序、堆、数值，含常用 ranges 子集
@@ -113,10 +111,6 @@ flowchart TD
 - 任务：`inplace_vector` 固定容量；`hive` 稳定引用/O(1) 删除；`mdspan` 布局策略雏形。
 - 验收：容量边界/索引正确性；性能基线观测记录。
 
-### W9 收尾与质量提升
-- 任务：文档完善、基准对比、fuzz 扩展；稳定性回归套件；发布 v0.1.0。
-- 验收：三编译器 Release 绿；Sanitizers 全绿；文档完整可读。
-
 ## 5. 资源与责任矩阵（RACI 简表）
 
 ```text
@@ -142,16 +136,11 @@ mdspan/hive 规范变化             低    中    中    标注试验性、接�
 过早优化影响可维护性             高    中    高    基准仅观察、不以基准驱动设计
 ```
 
-## 7. 质量门槛（阶段出口标准）
-- 测试：单测+属性测试+fuzz 样例；核心路径基准对比 `std::`
-- 工具：ASan/UBSan 常开；必要时 TSAN；Clang-Tidy 可选提示
-- 文档：接口语义、异常保证、迭代器失效规则、复杂度承诺、差异点
-
-## 8. 进度追踪（甘特图 - 概览）
+## 9. 进度追踪
 
 ```mermaid
 gantt
-  title MySTL 9周开发甘特图
+  title MySTL 
   dateFormat  WW
   axisFormat  %W
   section 基建
@@ -169,16 +158,3 @@ gantt
   section 收尾
   文档基准发布      : 09, 1w
 ```
-
-> 注：以周为单位的规划，可按实际进度在 PR 合并后滚动更新。
-
-## 9. 验收清单（DoD）
-- 构建：GCC/Clang/MSVC 通过，Debug/Release/RelWithDebInfo
-- 质量：Sanitizers 通过；属性/模糊测试通过；关键基准运行完成
-- 文档：README 与本计划一致；差异与限制明确
-- 版本：打 tag v0.1.0，变更日志与里程碑记录
-
----
-
-如需导出 PDF，请使用支持 mermaid 的渲染器或在 CI 中加入静态导出步骤（如 `mermaid-cli`）。
-
