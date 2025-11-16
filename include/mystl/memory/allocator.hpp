@@ -1,28 +1,6 @@
 #ifndef MYSTL_MEMORY_ALLOCATOR_HPP
 #define MYSTL_MEMORY_ALLOCATOR_HPP
 
-/**
- * @file memory/allocator.hpp
- * @brief 内存分配器接口 (Allocator Interface)
- *
- * 分配器是容器的基础，所有需要动态内存的容器都依赖分配器来管理内存。
- *
- * - allocate() 失败时抛出 std::bad_alloc（而非返回 nullptr）
- * - 与 allocator_traits 配合使用，提供统一的分配器接口抽象
- * - 支持无状态分配器（stateless allocator），可复制、可移动
- *
- * ## 接口要求
- * - allocate(n): 分配 n 个对象的连续内存，返回指向首元素的指针（C++20 起为 constexpr）
- * - allocate_at_least(n): 分配至少 n 个对象的未初始化存储（C++23，constexpr）
- * - deallocate(p, n): 释放由 p 指向的 n 个对象的内存（C++20 起为 constexpr）
- *
- * ## 异常安全
- * - allocate() 失败时抛出 std::bad_alloc（强异常保证）
- * - allocate_at_least() 失败时抛出 std::bad_alloc 或 std::bad_array_new_length（强异常保证）
- * - deallocate() 不抛出异常（nothrow 保证）
- *
- */
-
 #include <cstddef>
 #include <limits>
 #include <new>
@@ -32,12 +10,6 @@
 
 namespace mystl {
 
-/**
- * @brief 默认分配器
- *
- * 根据 cppreference.com/std::allocator
- * 提供标准的内存分配接口
- */
 template <class T>
 struct allocator {
   // 类型定义
@@ -87,6 +59,13 @@ struct allocator {
 #endif
   }
 
+  // 可选的 allocate 重载：带 hint 参数（用于优化，但当前实现忽略 hint）
+  // 根据标准，这是可选的，如果分配器不提供此重载，allocator_traits 会回退到单参数版本
+  constexpr T* allocate(size_type n, const void* hint) {
+    (void)hint;  // hint 在当前实现中未使用，但保留接口以符合标准
+    return allocate(n);
+  }
+
   constexpr mystl::allocation_result<T*> allocate_at_least(std::size_t n) {
     static_assert(sizeof(T) > 0, "T must be a complete type");
 
@@ -96,6 +75,9 @@ struct allocator {
 
     constexpr std::size_t align = alignof(T);
 
+    // allocate_at_least 允许分配至少 n 个元素，可能分配更多
+    // 当前实现分配恰好 n 个元素，这是符合标准的（至少分配了 n 个）
+    // 未来可以优化为分配更多元素以减少重新分配次数
     std::size_t count = n;
 
     // 如果对齐要求超过默认对齐，使用对齐的 operator new（C++17）
@@ -124,6 +106,7 @@ struct allocator {
   //   或者如果 p 是从返回 {p, count} 的 allocate_at_least(m) 调用获得的，则在范围 [m, count] 内
   // - 调用 ::operator delete(void*) 或 ::operator delete(void*, std::align_val_t)
   // - 在常量表达式求值中，此函数必须解分配在同一表达式求值中分配的存储
+  // - C++20 起：此函数为 constexpr
   constexpr void deallocate(T* p, size_type n) noexcept {
     // 如果 p 是通过 allocate_at_least 分配的，n 应该在 [m, count] 范围内
     (void)n;  // 避免未使用参数警告

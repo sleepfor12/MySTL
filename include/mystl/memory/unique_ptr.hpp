@@ -12,8 +12,6 @@
 #include <type_traits>
 #include <utility>
 
-#include "mystl/memory/pointer_traits.hpp"
-
 namespace mystl {
 
 namespace detail {

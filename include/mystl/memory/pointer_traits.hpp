@@ -34,6 +34,7 @@
 #define MYSTL_MEMORY_POINTER_TRAITS_HPP
 
 #include <cstddef>
+#include <memory>
 #include <type_traits>
 
 namespace mystl {
@@ -45,7 +46,6 @@ template <class...>
 using void_t = void;
 #endif
 
-// 检测类型是否有 element_type 成员
 template <class T, class = void>
 struct has_element_type : std::false_type {};
 
@@ -54,7 +54,6 @@ struct has_element_type<T, void_t<typename T::element_type>> : std::true_type {
   using type = typename T::element_type;
 };
 
-// 检测类型是否有 difference_type 成员
 template <class T, class = void>
 struct has_difference_type : std::false_type {};
 
@@ -63,7 +62,6 @@ struct has_difference_type<T, void_t<typename T::difference_type>> : std::true_t
   using type = typename T::difference_type;
 };
 
-// 检测类型是否有 rebind 成员模板
 template <class T, class U, class = void>
 struct has_rebind : std::false_type {};
 
@@ -72,21 +70,17 @@ struct has_rebind<T, U, void_t<typename T::template rebind<U>>> : std::true_type
   using type = typename T::template rebind<U>;
 };
 
-// 从模板特化中提取第一个模板参数并替换为 U
-// 用于实现 rebind 的模板特化检测（Template<T, Args...> -> Template<U, Args...>）
 template <class Ptr, class U, class = void>
 struct rebind_from_template {
   // 默认情况：无法从模板特化推断，导致替换失败
   using type = void;
 };
 
-// 检测是否为单参数模板 Template<T>
 template <template <class> class Template, class T, class U>
 struct rebind_from_template<Template<T>, U, void_t<Template<U>>> {
   using type = Template<U>;
 };
 
-// 检测是否为多参数模板 Template<T, Args...>
 template <template <class, class...> class Template, class T, class... Args, class U>
 struct rebind_from_template<Template<T, Args...>, U, void_t<Template<U, Args...>>> {
   using type = Template<U, Args...>;
